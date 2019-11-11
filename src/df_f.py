@@ -1,4 +1,9 @@
-def dfFilter(df,team,team2):
+import pandas as pd
+import re
+import numpy as np
+
+def dfFilter(team,team2):
+   df=pd.read_csv("./input/FMEL_Dataset.csv")
    df_team=df[(df['timestamp']>=1093644000) & ((df['localTeam']==team) | (df['localTeam']==team2)) & ((df['visitorTeam']==team2) | (df['visitorTeam']==team))]
    df_team['localTeam']=df_team['localTeam'].map(lambda x: x.lower() if isinstance(x,str) else x)
    df_team['visitorTeam']=df_team['visitorTeam'].map(lambda x: x.lower() if isinstance(x,str) else x)
