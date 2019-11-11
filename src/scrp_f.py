@@ -19,13 +19,19 @@ def next_match(soup):
     return next_match
 
 ##team2
-def team2(soup):
+def team2(soup,team):
     matches = soup.findAll('h2',{"class":'Event__title'})
     next_match = matches[0].find("a").text
     next_match = next_match.lstrip().rstrip()
     nm2=re.sub("\s\s+" , " ",next_match)
     nm3=nm2.split(" - ",)
-    return nm3[1]
+    
+    if nm3[0]==team:
+        contender=nm3[1]
+    else:
+        contender=nm3[0] 
+
+    return contender
 
 ##date_next_match
 def date_next_match(soup):
@@ -50,14 +56,14 @@ def matchday_next_match(soup):
     return matchday_next_match
 
 def printer():
-    return "El proximo partido de tu equipo es el {} contra el/la {} correspondiente a la {} de {}.".format(date_next_match(soup),team2(next_match),matchday_next_match(soup),competition_next_match(soup))
+    return "El proximo partido de tu equipo es el {} contra el/la {} correspondiente a la {} de {}.".format(date_next_match(soup),team2(soup,team),matchday_next_match(soup),competition_next_match(soup))
 
 '''
-team="eibar"
+team="Valladolid"
 soup=scraping(team)
 
 print(next_match(soup))
-print(team2(soup))
+print(team2(soup,team))
 print(date_next_match(soup))
 print(competition_next_match(soup))
 print(matchday_next_match(soup))
