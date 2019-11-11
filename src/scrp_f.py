@@ -55,7 +55,7 @@ def matchday_next_match(soup):
     matchday_next_match = matchday_next_match.lstrip().rstrip()
     return matchday_next_match
 
-def printer():
+def printer(soup,team):
     return "El proximo partido de tu equipo es el {} contra el/la {} correspondiente a la {} de {}.".format(date_next_match(soup),team2(soup,team),matchday_next_match(soup),competition_next_match(soup))
 
 '''

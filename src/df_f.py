@@ -12,28 +12,34 @@ def dfFilter(team,team2):
    return df_team
 
 ##function to translate if your team wins, loses, or draws for each game
-def result (row):
-   if row['localGoals'] == row['visitorGoals']:
+def result (row,team):
+   if row['localGoals']==row['visitorGoals']:
       return 1
-   if row['localTeam']==team and row['localGoals']>row['visitorGoals']:
+   if row['localTeam']==team.lower() and row['localGoals']>row['visitorGoals']:
       return 3
-   if row['visitorTeam']==team and row['visitorGoals']>row['localGoals']:
+   if row['visitorTeam']==team.lower() and row['visitorGoals']>row['localGoals']:
       return 3
    else:
       return 0
 
+
 ##creating and appending new column
 
-def summary(sign):
-    return print("{} y {} se han enfrentado {} veces en los últimos 20 años. {} ha ganado {} partidos, perdido {}, y empatado {}.".format(team,team2,sign.sum(),team,sign[3],sign[0],sign[1]))
+def summary(a,team,team2):
+   a = pd.Series(a)
+   a = a.value_counts()
+   ##sign=a.value_counts()
+   ##sign=df_team['result'].value_counts()
+   return "{} y {} se han enfrentado {} veces en los últimos 20 años. {} ha ganado {} partidos, perdido {}, y empatado {}.".format(team,team2,a.sum(),team,a[3],a[0],a[1])
 
+
+'''
 team="Levante"
 team2="Mallorca"
 
 df_team=dfFilter(team,team2)
-df_team['result'] = df_team.apply(lambda row: result(row), axis=1)
-a=df_team['result'].value_counts()
+df_team['result'] = df_team.apply(lambda df_team: result(df_team), axis=1)
+
 print(df_team)
-print(a)
-print(summary(a))
-##print(summary(df_team['result']))
+print(summary(df_team['result']))
+'''
