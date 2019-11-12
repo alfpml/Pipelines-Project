@@ -25,13 +25,14 @@ def team2(soup,team):
     next_match = next_match.lstrip().rstrip()
     nm2=re.sub("\s\s+" , " ",next_match)
     nm3=nm2.split(" - ",)
+    local=nm3[0].lower()
+    visitor=nm3[1].lower()
+    team=team.lower()
     
-    if nm3[0]==team:
-        contender=nm3[1]
+    if local==team:
+        return visitor
     else:
-        contender=nm3[0] 
-
-    return contender
+        return local
 
 ##date_next_match
 def date_next_match(soup):
@@ -56,7 +57,7 @@ def matchday_next_match(soup):
     return matchday_next_match
 
 def printer(soup,team):
-    return "El proximo partido de tu equipo es el {} contra el/la {} correspondiente a la {} de {}.".format(date_next_match(soup),team2(soup,team),matchday_next_match(soup),competition_next_match(soup))
+    return "El proximo partido de tu equipo es el {} contra el {} correspondiente a la {} de {}.".format(date_next_match(soup),team2(soup,team).upper(),matchday_next_match(soup),competition_next_match(soup))
 
 '''
 team="Valladolid"
