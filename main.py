@@ -15,7 +15,7 @@ def parse():
 def main(): 
     args=parse()
     input_team=args.input_team
-
+    soup=scrp_f.scraping(input_team)
     team=scrp_f.strip_accents(input_team)
     match=scrp_f.next_match(soup)
     
@@ -25,9 +25,6 @@ def main():
     date_match=scrp_f.date_next_match(soup)
     competition_match=scrp_f.competition_next_match(soup)
     matchday_match=scrp_f.matchday_next_match(soup)
-
-
-    
     df_filtered=df_f.dfFilter(team,contender)
     df_filtered["result"] = df_filtered.apply(lambda df_filtered: df_f.result(df_filtered,team), axis=1)
     Last_Games=df_filtered.head(5)

@@ -18,7 +18,7 @@ def strip_accents(text):
     return str(text)
 
 ## Getting Soup
-def scraping(input_team):
+def scraping(team):
     url='https://dondeverlo.com/futbol/equipo/{}'.format(team)
     res = requests.get(url)
     html = res.text
@@ -71,5 +71,5 @@ def matchday_next_match(soup):
     return matchday_match
 
 ##summary scrapping next match
-def printer(soup,team):
+def printer(contender):
     return "El proximo partido de tu equipo es el {} contra {} correspondiente a la {} de {}.".format(date_match,contender,matchday_match,competition_match)
