@@ -25,10 +25,12 @@ def team2(soup,team):
     next_match = next_match.lstrip().rstrip()
     nm2=re.sub("\s\s+" , " ",next_match)
     nm3=nm2.split(" - ",)
+    nm3 = [w.replace('Alavés','Alaves') for w in nm3]
     local=nm3[0].lower()
     visitor=nm3[1].lower()
     team=team.lower()
-    
+
+    ##print(nm3,nm31)
     if local==team:
         return visitor
     else:
@@ -58,15 +60,3 @@ def matchday_next_match(soup):
 
 def printer(soup,team):
     return "El proximo partido de tu equipo es el {} contra el {} correspondiente a la {} de {}.".format(date_next_match(soup),team2(soup,team).upper(),matchday_next_match(soup),competition_next_match(soup))
-
-'''
-team="Valladolid"
-soup=scraping(team)
-
-print(next_match(soup))
-print(team2(soup,team))
-print(date_next_match(soup))
-print(competition_next_match(soup))
-print(matchday_next_match(soup))
-print(printer())
-'''

@@ -6,7 +6,7 @@ import src.df_f as df_f
 import src.scrp_f as scrp_f
 
 def parse():
-    parser = argparse.ArgumentParser(description='Descubre al siguiente rival de tu equipo')          
+    parser = argparse.ArgumentParser(description='Descubre al siguiente rival de tu equipo')
     parser.add_argument('--team', help='Elige tu equipo de la Liga. Ex: Villareal.')
     args = parser.parse_args()
     return args
@@ -26,16 +26,16 @@ def main():
     scrp_f.competition_next_match(soup)
     scrp_f.matchday_next_match(soup)
     
-    df_team=df_f.dfFilter(team,team2)
-    df_team["result"] = df_team.apply(lambda df_team: df_f.result(df_team,team), axis=1)
-    Last_Games=df_team.head(5)
+    df_filtered=df_f.dfFilter(team,team2)
+    df_filtered["result"] = df_filtered.apply(lambda df_filtered: df_f.result(df_filtered,team), axis=1)
+    Last_Games=df_filtered.head(5)
 
     ##Saving csv file with last 5 games:
     Last_Games.to_csv("./output/lastgames.csv")
 
     print("Tu equipo: {}".format(team.upper()))
     print(scrp_f.printer(soup,team))
-    print(df_f.summary(df_team['result'],team,team2))
+    print(df_f.summary(df_filtered['result'],team,team2))
     print("Ultimos 5 enfrentamientos:")
     print(Last_Games)
 

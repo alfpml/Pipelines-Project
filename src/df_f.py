@@ -7,11 +7,11 @@ def dfFilter(team,team2):
    df=pd.read_csv("./input/FMEL_Dataset.csv")
    df['localTeam']=df['localTeam'].map(lambda x: x.lower() if isinstance(x,str) else x)
    df['visitorTeam']=df['visitorTeam'].map(lambda x: x.lower() if isinstance(x,str) else x)
-   df_team=df.replace("atletico de bilbao","athletic")
-   df_team=df.replace("atletico de Madrid","atletico")
-   df_team=df.replace("celta de Vigo","celta")
-   df_team=df[(df['timestamp']>=1093644000) & ((df['localTeam']==(team)) | (df['localTeam']==(team2))) & ((df['visitorTeam']==(team2)) | (df['visitorTeam']==(team)))]
-   return df_team.sort_values('timestamp', ascending=False )
+   df_team1=df.replace("atletico de bilbao","athletic")
+   df_team2=df_team1.replace("atletico de Madrid","atletico")
+   df_team3=df_team2.replace("celta de Vigo","celta")
+   df_team4=df_team3[(df['timestamp']>=1093644000) & ((df['localTeam']==(team)) | (df['localTeam']==(team2))) & ((df['visitorTeam']==(team2)) | (df['visitorTeam']==(team)))]
+   return df_team4.sort_values('timestamp', ascending=False)
 
 ##function to translate if your team wins, loses, or draws for each game
 def result (row,team):
@@ -32,15 +32,3 @@ def summary(a,team,team2):
    ##sign=a.value_counts()
    ##sign=df_team['result'].value_counts()
    return "{} y {} se han enfrentado {} veces en los últimos 20 años. El {} ha ganado {} partidos, perdido {}, y empatado {}.".format(team.upper(),team2.upper(),a.sum(),team.upper(),a[3],a[0],a[1])
-
-
-'''
-team="Levante"
-team2="Mallorca"
-
-df_team=dfFilter(team,team2)
-df_team['result'] = df_team.apply(lambda df_team: result(df_team), axis=1)
-
-print(df_team)
-print(summary(df_team['result']))
-'''
