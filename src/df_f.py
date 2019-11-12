@@ -7,8 +7,11 @@ def dfFilter(team,team2):
    df=pd.read_csv("./input/FMEL_Dataset.csv")
    df['localTeam']=df['localTeam'].map(lambda x: x.lower() if isinstance(x,str) else x)
    df['visitorTeam']=df['visitorTeam'].map(lambda x: x.lower() if isinstance(x,str) else x)
+   df_team=df.replace("atletico de bilbao","athletic")
+   df_team=df.replace("atletico de Madrid","atletico")
+   df_team=df.replace("celta de Vigo","celta")
    df_team=df[(df['timestamp']>=1093644000) & ((df['localTeam']==(team)) | (df['localTeam']==(team2))) & ((df['visitorTeam']==(team2)) | (df['visitorTeam']==(team)))]
-   return df_team
+   return df_team.sort_values('timestamp', ascending=False )
 
 ##function to translate if your team wins, loses, or draws for each game
 def result (row,team):
