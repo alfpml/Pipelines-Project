@@ -1,11 +1,25 @@
+import pandas as pd
+import re
+import numpy as np
 import requests
 import re
 from bs4 import BeautifulSoup
-import pandas as pd
+import unicodedata
+
+##function to remove accents
+def strip_accents(text):
+    try:
+        text = unicode(text, 'utf-8')
+    except NameError: # unicode is a default on python 3 
+        pass
+    text = unicodedata.normalize('NFD', text)\
+           .encode('ascii', 'ignore')\
+           .decode("utf-8")
+    return str(text)
 
 ## Getting Soup
-def scraping(team):
-    url='https://dondeverlo.com/futbol/equipo/{}'.format(team.lower())
+def scraping(input_team):
+    url='https://dondeverlo.com/futbol/equipo/{}'.format(team)
     res = requests.get(url)
     html = res.text
     soup = BeautifulSoup(html,'html.parser')
@@ -13,24 +27,22 @@ def scraping(team):
 
 ##next_match
 def next_match(soup):
-    matches = soup.findAll('h2',{"class":'Event__title'})
-    next_match = matches[0].find("a").text
-    next_match = next_match.lstrip().rstrip()
-    return next_match
+    matches=soup.findAll('h2',{"class":'Event__title'})
+    match=matches[0].text
+    match=match.lstrip().rstrip()
+    return match
 
 ##team2
 def team2(soup,team):
-    matches = soup.findAll('h2',{"class":'Event__title'})
-    next_match = matches[0].find("a").text
-    next_match = next_match.lstrip().rstrip()
-    nm2=re.sub("\s\s+" , " ",next_match)
+    matches=soup.findAll('h2',{"class":'Event__title'})
+    match=matches[0].text
+    match=match.lstrip().rstrip()
+    
+    nm2=re.sub("\s\s+" , " ",match)
+    nm2=strip_accents(nm2)
     nm3=nm2.split(" - ",)
-    nm3 = [w.replace('Alavés','Alaves') for w in nm3]
-    local=nm3[0].lower()
-    visitor=nm3[1].lower()
-    team=team.lower()
-
-    ##print(nm3,nm31)
+    local=nm3[0]
+    visitor=nm3[1]
     if local==team:
         return visitor
     else:
@@ -39,24 +51,25 @@ def team2(soup,team):
 ##date_next_match
 def date_next_match(soup):
     dates = soup.findAll('div',{"class":'Event__when'})
-    date_next_match = dates[0].text
-    date_next_match = date_next_match.lstrip().rstrip()
-    return date_next_match
+    date_match = dates[0].text
+    date_match = date_match.lstrip().rstrip()
+    return date_match
 
 ##competition_next_match
 def competition_next_match(soup):
     competition = soup.findAll('span',{"class":'Event__championshipText'})
-    competition_next_match = competition[0].text
-    competition_next_match = competition_next_match.lstrip().rstrip()
-    competition=competition_next_match.split("-")
+    competition_match = competition[0].text
+    competition_match = competition_match.lstrip().rstrip()
+    competition=competition_match.split("-")
     return competition[1].lstrip().rstrip()
 
 ##matchday_next_match
 def matchday_next_match(soup):
     matchday = soup.findAll('div',{"class":'Event__description'})
-    matchday_next_match = matchday[0].text
-    matchday_next_match = matchday_next_match.lstrip().rstrip()
-    return matchday_next_match
+    matchday_match = matchday[0].text
+    matchday_match = matchday_match.lstrip().rstrip()
+    return matchday_match
 
+##summary scrapping next match
 def printer(soup,team):
-    return "El proximo partido de tu equipo es el {} contra el {} correspondiente a la {} de {}.".format(date_next_match(soup),team2(soup,team).upper(),matchday_next_match(soup),competition_next_match(soup))
+    return "El proximo partido de tu equipo es el {} contra {} correspondiente a la {} de {}.".format(date_match,contender,matchday_match,competition_match)
