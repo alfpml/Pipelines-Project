@@ -6,8 +6,9 @@ import re
 from bs4 import BeautifulSoup
 import unicodedata
 
-##function to remove accents
+## function to remove accents
 def strip_accents(text):
+    text=text.lower()
     try:
         text = unicode(text, 'utf-8')
     except NameError: # unicode is a default on python 3 
@@ -17,7 +18,7 @@ def strip_accents(text):
            .decode("utf-8")
     return str(text)
 
-## Getting Soup
+## Getting Soup from team based URL
 def scraping(team):
     url='https://dondeverlo.com/futbol/equipo/{}'.format(team)
     res = requests.get(url)
@@ -32,7 +33,7 @@ def next_match(soup):
     match=match.lstrip().rstrip()
     return match
 
-##team2
+##getting contender from next match
 def team2(soup,team):
     matches=soup.findAll('h2',{"class":'Event__title'})
     match=matches[0].text
@@ -71,5 +72,5 @@ def matchday_next_match(soup):
     return matchday_match
 
 ##summary scrapping next match
-def printer(contender):
+def printer(soup,team,contender):
     return "El proximo partido de tu equipo es el {} contra {} correspondiente a la {} de {}.".format(date_match,contender,matchday_match,competition_match)

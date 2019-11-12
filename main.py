@@ -25,8 +25,10 @@ def main():
     date_match=scrp_f.date_next_match(soup)
     competition_match=scrp_f.competition_next_match(soup)
     matchday_match=scrp_f.matchday_next_match(soup)
+    
     df_filtered=df_f.dfFilter(team,contender)
     df_filtered["result"] = df_filtered.apply(lambda df_filtered: df_f.result(df_filtered,team), axis=1)
+    
     Last_Games=df_filtered.head(5)
 
     ##Saving csv file with last 5 games:
@@ -34,11 +36,11 @@ def main():
 
     print("Tu equipo: {}".format(team.upper()))
     print("Tu rival: {}".format(contender.upper()))
-    print(printer(soup,team))
+    print("El proximo partido de tu equipo es el {} contra el {} correspondiente a la {} de {}.".format(date_match,contender.upper(),matchday_match,competition_match))
 
     print(df_f.summary(df_filtered['result'],team,contender))
     print("Ultimos 5 enfrentamientos:")
     print(Last_Games)
-
+    
 if __name__=='__main__':
     main()
